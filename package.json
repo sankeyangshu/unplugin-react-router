@@ -1,7 +1,8 @@
 {
-  "name": "vite-plugin-react-pages",
+  "name": "@vite-plugin-react-pages/monorepo",
   "version": "0.0.0",
   "type": "module",
+  "private": true,
   "packageManager": "pnpm@10.12.1",
   "description": "File system based route generator for react under Vite",
   "author": {
@@ -19,29 +20,10 @@
     "url": "https://github.com/sankeyangshu/vite-plugin-react-pages/issues"
   },
   "keywords": [],
-  "main": "./dist/index.js",
-  "module": "./dist/index.js",
-  "types": "./dist/index.d.ts",
-  "files": [
-    "dist"
-  ],
-  "engines": {
-    "node": "^18.18.0 || >=20.0.0"
-  },
-  "exports": {
-    ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.js",
-      "require": "./dist/index.cjs"
-    }
-  },
-  "publishConfig": {
-    "access": "public"
-  },
   "scripts": {
-    "build": "tsdown",
-    "dev": "tsdown --watch",
-    "start": "esno src/index.ts",
+    "build": "pnpm --filter @sankeyangshu/vite-plugin-react-pages build",
+    "dev": "pnpm --filter @sankeyangshu/vite-plugin-react-pages dev",
+    "play": "pnpm --filter playground dev",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "test": "vitest",
@@ -55,10 +37,9 @@
     "@commitlint/cli": "^19.8.1",
     "@commitlint/config-conventional": "^19.8.1",
     "@sankeyangshu/eslint-config": "^1.0.0",
-    "@types/node": "^22.15.31",
+    "@types/node": "^22.15.33",
     "bumpp": "^10.1.1",
     "eslint": "^9.28.0",
-    "esno": "^4.8.0",
     "lint-staged": "^16.1.0",
     "simple-git-hooks": "^2.13.0",
     "tsdown": "^0.12.7",

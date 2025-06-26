@@ -1,0 +1,47 @@
+{
+  "name": "@sankeyangshu/vite-plugin-react-pages",
+  "version": "0.0.0",
+  "type": "module",
+  "description": "File system based route generator for react under Vite",
+  "author": {
+    "name": "sankeyangshu",
+    "email": "sankeyangshu@gmail.com",
+    "url": "https://github.com/sankeyangshu"
+  },
+  "license": "MIT",
+  "homepage": "https://github.com/sankeyangshu/vite-plugin-react-pages#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sankeyangshu/vite-plugin-react-pages.git"
+  },
+  "bugs": {
+    "url": "https://github.com/sankeyangshu/vite-plugin-react-pages/issues"
+  },
+  "keywords": [],
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "client.d.ts",
+    "dist"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    },
+    "./client": {
+      "types": "./client.d.ts"
+    }
+  },
+  "scripts": {
+    "build": "tsdown",
+    "dev": "tsdown --watch",
+    "prepublishOnly": "pnpm build"
+  },
+  "devDependencies": {
+    "@types/node": "^22.15.31",
+    "vite": "^7.0.0"
+  }
+}
