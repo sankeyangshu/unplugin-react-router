@@ -1,37 +1,110 @@
 {
-  "name": "@vite-plugin-react-pages/monorepo",
+  "name": "unplugin-react-router",
   "version": "0.0.0",
   "type": "module",
   "private": true,
   "packageManager": "pnpm@10.12.1",
-  "description": "File system based route generator for react under Vite",
+  "description": "File system based route generator for react",
   "author": {
     "name": "sankeyangshu",
     "email": "sankeyangshu@gmail.com",
     "url": "https://github.com/sankeyangshu"
   },
   "license": "MIT",
-  "homepage": "https://github.com/sankeyangshu/vite-plugin-react-pages#readme",
+  "homepage": "https://github.com/sankeyangshu/unplugin-react-router#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/sankeyangshu/vite-plugin-react-pages.git"
+    "url": "git+https://github.com/sankeyangshu/unplugin-react-router.git"
   },
   "bugs": {
-    "url": "https://github.com/sankeyangshu/vite-plugin-react-pages/issues"
+    "url": "https://github.com/sankeyangshu/unplugin-react-router/issues"
   },
-  "keywords": [],
+  "keywords": [
+    "unplugin",
+    "vite",
+    "webpack",
+    "rollup",
+    "rspack",
+    "rolldown",
+    "esbuild",
+    "react",
+    "react-router",
+    "pages",
+    "filesystem",
+    "types",
+    "typed"
+  ],
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    },
+    "./vite": {
+      "import": "./dist/vite.js",
+      "require": "./dist/vite.cjs"
+    },
+    "./webpack": {
+      "import": "./dist/webpack.js",
+      "require": "./dist/webpack.cjs"
+    },
+    "./rspack": {
+      "import": "./dist/rspack.js",
+      "require": "./dist/rspack.cjs"
+    },
+    "./rollup": {
+      "import": "./dist/rollup.js",
+      "require": "./dist/rollup.cjs"
+    },
+    "./rolldown": {
+      "import": "./dist/rolldown.js",
+      "require": "./dist/rolldown.cjs"
+    },
+    "./esbuild": {
+      "import": "./dist/esbuild.js",
+      "require": "./dist/esbuild.cjs"
+    },
+    "./types": {
+      "types": {
+        "import": "./dist/types.d.ts",
+        "require": "./dist/types.d.cts"
+      }
+    }
+  },
+  "typesVersions": {
+    "*": {
+      "*": [
+        "./dist/*",
+        "./*"
+      ]
+    }
+  },
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
-    "build": "pnpm --filter @sankeyangshu/vite-plugin-react-pages build",
-    "dev": "pnpm --filter @sankeyangshu/vite-plugin-react-pages dev",
-    "play": "pnpm --filter playground dev",
+    "build": "tsdown",
+    "dev": "tsdown --watch",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "test": "vitest",
     "typecheck": "tsc --noEmit",
     "release": "bumpp && pnpm publish",
-    "prepublishOnly": "pnpm build",
+    "prepublishOnly": "pnpm run build",
     "preinstall": "npx only-allow pnpm",
     "prepare": "simple-git-hooks"
+  },
+  "dependencies": {
+    "unplugin": "^2.3.5",
+    "unplugin-utils": "^0.2.4"
   },
   "devDependencies": {
     "@commitlint/cli": "^19.8.1",
@@ -40,10 +113,14 @@
     "@types/node": "^22.15.33",
     "bumpp": "^10.1.1",
     "eslint": "^9.28.0",
+    "esno": "^4.8.0",
     "lint-staged": "^16.1.0",
+    "rolldown": "1.0.0-beta.24",
+    "rollup": "^4.44.2",
     "simple-git-hooks": "^2.13.0",
     "tsdown": "^0.12.7",
     "typescript": "^5.8.3",
+    "vite": "^7.0.2",
     "vitest": "^3.2.3"
   },
   "simple-git-hooks": {

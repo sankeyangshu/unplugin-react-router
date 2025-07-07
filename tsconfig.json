@@ -2,28 +2,26 @@
   "compilerOptions": {
     "target": "ESNext",
     "lib": ["ESNext"],
+
     "module": "ESNext",
+    /* Bundler mode */
     "moduleResolution": "Bundler",
-    "paths": {
-      "@sankeyangshu/vite-plugin-react-pages": ["./packages/core/src/index.ts"]
-    },
     "resolveJsonModule": true,
     "types": ["node"],
+    "allowImportingTsExtensions": true,
+    /* Linting */
     "strict": true,
     "strictNullChecks": true,
-    "esModuleInterop": true,
-    "skipDefaultLibCheck": true,
+    "noFallthroughCasesInSwitch": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noEmit": true,
+    "outDir": "./dist",
+    "forceConsistentCasingInFileNames": true,
+
+    "isolatedModules": true,
     "skipLibCheck": true
   },
-  "exclude": [
-    "**/dist/**",
-    "**/node_modules/**",
-    "**/client/**",
-    "**/playground/**",
-    "**/examples/**",
-    "**/fixtures/**",
-    "**/interactive/**",
-    "**/test/dts/**",
-    "packages/eslint-plugin/**"
-  ]
+  "include": ["src"],
+  "exclude": ["node_modules", "dist"]
 }
