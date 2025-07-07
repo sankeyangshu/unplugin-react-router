@@ -2,7 +2,6 @@
   "name": "unplugin-react-router",
   "version": "0.0.0",
   "type": "module",
-  "private": true,
   "packageManager": "pnpm@10.12.1",
   "description": "File system based route generator for react",
   "author": {
