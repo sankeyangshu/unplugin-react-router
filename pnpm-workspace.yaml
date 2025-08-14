@@ -1,0 +1,9 @@
+packages:
+  - docs
+  - examples/*
+  - packages/*
+  - playground
+onlyBuiltDependencies:
+  - esbuild
+  - simple-git-hooks
+  - unrs-resolver

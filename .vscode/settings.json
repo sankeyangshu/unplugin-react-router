@@ -1,20 +1,25 @@
 {
+  "editor.formatOnSave": true,
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": "explicit",
     "source.organizeImports": "never"
   },
   "eslint.useFlatConfig": true,
-  "editor.formatOnSave": false,
   "eslint.validate": [
-    "html",
-    "css",
-    "less",
-    "postcss",
+    "vue",
+    "svelte",
+    "astro",
+    "yaml",
+    "toml",
     "json",
     "jsonc",
-    "yaml",
-    "yml",
-    "markdown"
+    "json5",
+    "markdown",
+    "javascript",
+    "typescript",
+    "javascriptreact",
+    "typescriptreact"
   ],
-  "prettier.enable": false
+  "prettier.enable": true,
+  "cSpell.words": ["unplugin"]
 }

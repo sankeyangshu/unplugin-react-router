@@ -2,7 +2,7 @@
   "name": "unplugin-react-router",
   "version": "0.0.0",
   "type": "module",
-  "packageManager": "pnpm@10.12.1",
+  "packageManager": "pnpm@10.14.0",
   "description": "File system based route generator for react",
   "author": {
     "name": "sankeyangshu",
@@ -43,40 +43,15 @@
     "node": ">=20.0.0"
   },
   "exports": {
-    ".": {
-      "import": "./dist/index.js",
-      "require": "./dist/index.cjs"
-    },
-    "./vite": {
-      "import": "./dist/vite.js",
-      "require": "./dist/vite.cjs"
-    },
-    "./webpack": {
-      "import": "./dist/webpack.js",
-      "require": "./dist/webpack.cjs"
-    },
-    "./rspack": {
-      "import": "./dist/rspack.js",
-      "require": "./dist/rspack.cjs"
-    },
-    "./rollup": {
-      "import": "./dist/rollup.js",
-      "require": "./dist/rollup.cjs"
-    },
-    "./rolldown": {
-      "import": "./dist/rolldown.js",
-      "require": "./dist/rolldown.cjs"
-    },
-    "./esbuild": {
-      "import": "./dist/esbuild.js",
-      "require": "./dist/esbuild.cjs"
-    },
-    "./types": {
-      "types": {
-        "import": "./dist/types.d.ts",
-        "require": "./dist/types.d.cts"
-      }
-    }
+    ".": "./dist/index.js",
+    "./vite": "./dist/vite.js",
+    "./webpack": "./dist/webpack.js",
+    "./rspack": "./dist/rspack.js",
+    "./rollup": "./dist/rollup.js",
+    "./rolldown": "./dist/rolldown.js",
+    "./esbuild": "./dist/esbuild.js",
+    "./farm": "./dist/farm.js",
+    "./*": "./*"
   },
   "typesVersions": {
     "*": {
@@ -92,38 +67,37 @@
   "scripts": {
     "build": "tsdown",
     "dev": "tsdown --watch",
-    "lint": "eslint .",
-    "lint:fix": "eslint . --fix",
+    "start": "tsx src/index.ts",
+    "lint": "eslint",
+    "lint:fix": "eslint --fix",
     "test": "vitest",
-    "typecheck": "tsc --noEmit",
+    "typecheck": "tsc --noEmit --skipLibCheck",
     "release": "bumpp && pnpm publish",
-    "prepublishOnly": "pnpm run build",
+    "prepublishOnly": "pnpm build",
     "preinstall": "npx only-allow pnpm",
     "prepare": "simple-git-hooks"
   },
   "dependencies": {
     "unplugin": "^2.3.5",
-    "unplugin-utils": "^0.2.4"
+    "unplugin-utils": "^0.2.5"
   },
   "devDependencies": {
     "@commitlint/cli": "^19.8.1",
     "@commitlint/config-conventional": "^19.8.1",
-    "@sankeyangshu/eslint-config": "^1.0.0",
-    "@types/node": "^22.15.33",
-    "bumpp": "^10.1.1",
-    "eslint": "^9.28.0",
-    "esno": "^4.8.0",
-    "lint-staged": "^16.1.0",
-    "rolldown": "1.0.0-beta.24",
-    "rollup": "^4.44.2",
-    "simple-git-hooks": "^2.13.0",
-    "tsdown": "^0.12.7",
-    "typescript": "^5.8.3",
-    "vite": "^7.0.2",
-    "vitest": "^3.2.3"
+    "@sankeyangshu/eslint-config": "^2.2.0",
+    "@types/node": "^24.2.1",
+    "bumpp": "^10.2.2",
+    "eslint": "^9.33.0",
+    "lint-staged": "^16.1.5",
+    "prettier": "^3.6.2",
+    "simple-git-hooks": "^2.13.1",
+    "tsdown": "^0.14.0",
+    "tsx": "^4.20.3",
+    "typescript": "^5.9.2",
+    "vitest": "^3.2.4"
   },
   "simple-git-hooks": {
-    "pre-commit": "npx lint-staged",
+    "pre-commit": "pnpm typecheck && pnpm lint-staged",
     "commit-msg": "npx --no-install commitlint --edit $1"
   },
   "lint-staged": {

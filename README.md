@@ -18,4 +18,4 @@ _description_
 
 ## License
 
-[MIT](./LICENSE) License © 2024-PRESENT [sankeyangshu](https://github.com/sankeyangshu)
+[MIT](./LICENSE) License © 2025-PRESENT [sankeyangshu](https://github.com/sankeyangshu)
