@@ -90,6 +90,18 @@ export interface RouterContextOptions {
    * @param routeName route name
    */
   lazyImport?: (routeName: string) => boolean;
+  /**
+   * whether to watch the file
+   * @descCN 是否监听文件
+   * @default true
+   */
+  watchFile?: boolean;
+  /**
+   * the duration of the file update
+   * @descCN 文件更新时间
+   * @default 500 ms
+   */
+  watchFileUpdateDuration?: number;
 }
 
 /**
@@ -134,3 +146,37 @@ export type ParsedAutoRouterOptions = Omit<Required<RouterContextOptions>, 'layo
   layouts: NormalizedLayout[];
   pageExtension: string[];
 };
+
+/**
+ * the resolved glob
+ * @descCN 解析后的页面 glob
+ */
+export interface ResolvedGlob {
+  /**
+   * the page directory
+   * @descCN 页面目录
+   * @default pageDir
+   */
+  pageDir: string;
+  /**
+   * the glob of the pages
+   * @descCN 页面 glob
+   * @default '**‍/*.tsx'
+   */
+  glob: string;
+  /**
+   * the file path of the route
+   * @descCN 路由文件路径
+   */
+  filePath: string;
+  /**
+   * the import path of the route
+   * @descCN 路由导入路径
+   */
+  importPath: string;
+  /**
+   * the inode of the file
+   * @descCN 文件唯一标识
+   */
+  inode: number;
+}

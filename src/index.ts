@@ -1,23 +1,25 @@
 import { createUnplugin, type UnpluginInstance } from 'unplugin';
-import { createFilter } from 'unplugin-utils';
-import { resolveOptions, type Options } from './core/options';
+import { RouterContext } from './core';
+import type { PluginOptions } from './types';
 
-export const Starter: UnpluginInstance<Options | undefined, false> = createUnplugin((rawOptions = {}) => {
-  const options = resolveOptions(rawOptions);
-  const filter = createFilter(options.include, options.exclude);
+export const Starter: UnpluginInstance<PluginOptions | undefined, false> = createUnplugin((rawOptions = {}) => {
+  const autoRouter = new RouterContext(rawOptions);
 
-  const name = 'unplugin-react-router';
+  const autoRouterOptions = autoRouter.getOptions();
 
   return {
-    name,
-    enforce: options.enforce,
+    name: 'unplugin-react-router',
+    enforce: 'pre',
+    vite: {
+      apply: 'serve',
+      async configureServer(server) {
+        await autoRouter.generate();
+        if (autoRouterOptions.watchFile) {
+          autoRouter.watch();
+        }
 
-    transformInclude(id) {
-      return filter(id);
-    },
-
-    transform(code, _id) {
-      return `// unplugin-react-router injected\n${code}`;
+        autoRouter.setViteServer(server);
+      },
     },
   };
 });
