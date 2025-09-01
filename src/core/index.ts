@@ -1,6 +1,6 @@
 import { resolveGlobs } from './glob';
 import { resolveOptions } from './options';
-import { isInExcludeGlob } from './temp';
+import { initTemp, isInExcludeGlob } from './temp';
 import { FileWatcher } from './watcher';
 import type { ViteDevServer } from 'vite';
 import type { ParsedAutoRouterOptions, ResolvedGlob, RouterContextOptions } from '../types';
@@ -71,6 +71,7 @@ export class RouterContext {
    * @descCN 生成路由
    */
   async generate() {
+    await initTemp(this.options.cwd);
     await this.initGlobs();
   }
 
