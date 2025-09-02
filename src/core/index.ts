@@ -1,9 +1,16 @@
 import { resolveGlobs } from './glob';
+import { getNodeStatInfo, resolveNodes } from './node';
 import { resolveOptions } from './options';
 import { initTemp, isInExcludeGlob } from './temp';
 import { FileWatcher } from './watcher';
 import type { ViteDevServer } from 'vite';
-import type { ParsedAutoRouterOptions, ResolvedGlob, RouterContextOptions } from '../types';
+import type {
+  AutoRouterNode,
+  NodeStatInfo,
+  ParsedAutoRouterOptions,
+  ResolvedGlob,
+  RouterContextOptions,
+} from '../types';
 
 export class RouterContext {
   private options: ParsedAutoRouterOptions = {} as ParsedAutoRouterOptions;
@@ -13,6 +20,21 @@ export class RouterContext {
    * @descCN 解析后的 globs
    */
   globs: ResolvedGlob[] = [];
+
+  /**
+   * the nodes
+   * @descCN 节点
+   */
+  nodes: AutoRouterNode[] = [];
+
+  /**
+   * the stat info
+   * @descCN 统计信息
+   */
+  statInfo: NodeStatInfo = {
+    add: [],
+    rename: [],
+  };
 
   /**
    * the watcher
@@ -67,12 +89,38 @@ export class RouterContext {
   }
 
   /**
+   * init nodes
+   * @descCN 初始化节点
+   */
+  async initNodes() {
+    this.nodes = resolveNodes(this.globs, this.options);
+  }
+
+  /**
+   * get configurable nodes
+   * @descCN 获取可配置节点
+   */
+  getConfigurableNodes() {
+    return this.nodes.filter((node) => !node.isBuiltin);
+  }
+
+  /**
+   * init stat info
+   * @descCN 初始化统计信息
+   */
+  async initStatInfo() {
+    this.statInfo = await getNodeStatInfo(this.options.cwd, this.nodes);
+  }
+
+  /**
    * generate
    * @descCN 生成路由
    */
   async generate() {
     await initTemp(this.options.cwd);
     await this.initGlobs();
+    await this.initNodes();
+    await this.initStatInfo();
   }
 
   /**

@@ -2,6 +2,7 @@ import { existsSync } from 'node:fs';
 import { readFile, writeFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import { ensureFile } from '../utils';
+import type { NodeItemBackup } from '../types';
 
 const TEMP_DIR = '.temp';
 const GIT_IGNORE = '.gitignore';
@@ -158,4 +159,26 @@ export async function initTemp(cwd: string) {
   await initNodeBackup(cwd);
   await initRouteBackup(cwd);
   await initExcludeGlob(cwd);
+}
+
+/**
+ * get node backup
+ * @descCN 获取节点备份
+ * @param root project root path
+ * @returns node backup
+ */
+export async function getNodeBackup(root: string) {
+  const nodeBackupPath = getNodeBackupPath(root);
+
+  const content = await readFile(nodeBackupPath, 'utf-8');
+
+  let backup: Record<string, NodeItemBackup> = {};
+
+  try {
+    backup = JSON.parse(content);
+  } catch {
+    backup = {};
+  }
+
+  return backup;
 }
