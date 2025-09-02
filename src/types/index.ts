@@ -88,8 +88,9 @@ export interface RouterContextOptions {
    *   ```
    * @default _name => true
    * @param routeName route name
+   * TODO: 参数可能要修改
    */
-  lazyImport?: (routeName: string) => boolean;
+  routeLazyImport?: (routeName: string) => boolean;
   /**
    * whether to watch the file
    * @descCN 是否监听文件
@@ -102,14 +103,69 @@ export interface RouterContextOptions {
    * @default 500 ms
    */
   watchFileUpdateDuration?: number;
+  /**
+   * the root redirect path
+   * @descCN 根路由重定向路径
+   * @default '/home'
+   */
+  rootRedirect?: string;
+  /**
+   * the not found route component
+   * @descCN 404 路由组件
+   * @default '404'
+   */
+  notFoundRouteComponent?: string;
+  /**
+   * the routes to reuse
+   * @descCN 复用已存在文件的路由
+   * @example
+   *   ['/reuse1', '/reuse2/:id', '/reuse3/:id?/:name?'];
+   */
+  reuseRoutes?: string[];
+  /**
+   * the default component of the reuse route
+   * @descCN 复用路由的默认组件
+   * @default 'Wip'
+   */
+  defaultReuseRouteComponent?: string;
+  /**
+   * the path of the route
+   * @descCN 路由路径
+   * @default 'src/router/auto-router'
+   */
+  getRoutePath?: (node: AutoRouterNode) => string;
+  /**
+   * the name of the route
+   * @descCN 路由名称
+   * @default transform the path to the route name
+   */
+  getRouteName?: (node: AutoRouterNode) => string;
+  /**
+   * the layout of the route
+   * @descCN 路由布局
+   * @default get the first key of the layouts
+   */
+  getRouteLayout?: (node: AutoRouterNode) => string;
+  /**
+   * the function to generate the meta of the route
+   * @descCN 生成路由的 handle 函数, 只会覆盖不存在的 handle 属性
+   * @example
+   *   ```ts
+   *     getRouteHandle: (node) => {
+   *       return {
+   *         title: node.name
+   *       }
+   *     }
+   *   ```;
+   */
+  getRouteHandle?: (node: AutoRouterNode) => Record<string, any> | null;
 }
 
 /**
  * unplugin options
  * @descCN unplugin 选项
- * TODO: 待实现移除复用路由的选项
  */
-export type PluginOptions = RouterContextOptions;
+export type PluginOptions = Omit<RouterContextOptions, 'reuseRoutes'>;
 
 /**
  * the normalized layout
@@ -177,6 +233,126 @@ export interface ResolvedGlob {
   /**
    * the inode of the file
    * @descCN 文件唯一标识
+   */
+  inode: number;
+}
+
+/**
+ * the type of the route param
+ * @descCN 路由参数类型
+ * - optional: the param is optional, [[id]] 可选参数
+ * - required: the param is required, [id] 必选参数
+ */
+export type AutoRouterParamType = 'optional' | 'required';
+
+/**
+ * the auto router node
+ * @descCN 自动路由节点
+ */
+export interface AutoRouterNode extends ResolvedGlob {
+  /**
+   * the path of the route
+   * @descCN 路由路径
+   * @default transform the glob to the path
+   */
+  fullPath: string;
+  /**
+   * the name of the route
+   * @descCN 路由名称
+   * @default transform the path to the route name
+   */
+  name: string;
+  /**
+   * the origin path of the route
+   * @descCN 路由原始路径
+   */
+  originPath: string;
+  /**
+   * the component of the route
+   * @descCN 路由组件
+   */
+  component: string;
+  /**
+   * the layout of the route
+   * @descCN 路由布局
+   * @default get the first key of the layouts
+   */
+  layout: string;
+  /**
+   * the group of the route
+   * @descCN 路由组
+   * @default ''
+   */
+  group?: string;
+  /**
+   * the params of the route
+   * @descCN 路由参数
+   */
+  params?: Record<string, AutoRouterParamType>;
+  /**
+   * the import name of the route
+   * @descCN 路由组件导入名称
+   */
+  importName: string;
+  /**
+   * the lazy of the route
+   * @descCN 路由懒加载
+   */
+  isLazy?: boolean;
+  /**
+   * the builtin of the route. (Root, NotFound)
+   * @descCN 内置路由 (Root, NotFound)
+   */
+  isBuiltin?: boolean;
+  /**
+   * the reuse of the route
+   * @descCN 复用路由
+   */
+  isReuse?: boolean;
+}
+
+/**
+ * the renamed node
+ * @descCN 重命名节点
+ */
+interface RenamedNode extends AutoRouterNode {
+  /**
+   * the old node name
+   * @descCN 旧节点名称
+   */
+  oldNodeName: string;
+}
+
+/**
+ * the node stat info
+ * @descCN 节点统计信息
+ */
+export interface NodeStatInfo {
+  /**
+   * the added nodes
+   * @descCN 新增节点
+   */
+  add: AutoRouterNode[];
+  /**
+   * the renamed nodes
+   * @descCN 重命名节点
+   */
+  rename: RenamedNode[];
+}
+
+/**
+ * the node item backup
+ * @descCN 节点备份
+ */
+export interface NodeItemBackup {
+  /**
+   * the filepath of the node
+   * @descCN 节点文件路径
+   */
+  filepath: string;
+  /**
+   * the inode of the node
+   * @descCN 节点唯一标识
    */
   inode: number;
 }

@@ -1,7 +1,8 @@
 import { resolve } from 'node:path';
 import process from 'node:process';
+import { pascalCase } from 'scule';
 import { normalizePath } from 'unplugin-utils';
-import { getImportName, resolveAliasFromTsConfig, resolveImportPath } from '../utils';
+import { getImportName, resolveAliasFromTsConfig, resolveImportPath, transformPathToName } from '../utils';
 import type { ParsedAutoRouterOptions, RouterContextOptions } from '../types';
 
 export function resolveOptions(options?: RouterContextOptions) {
@@ -23,10 +24,18 @@ export function resolveOptions(options?: RouterContextOptions) {
       base: 'src/layouts/base/index.tsx',
       blank: 'src/layouts/blank/index.tsx',
     },
-
-    // TODO: 接下来的这几个可能需要优化待定
     layoutLazyImport: (_name) => true,
-    lazyImport: (_name) => true,
+    routeLazyImport: (_name) => true, // TODO: 接下来的这几个可能需要优化待定
+    watchFile: true,
+    watchFileUpdateDuration: 500,
+    rootRedirect: '/home',
+    notFoundRouteComponent: '404',
+    reuseRoutes: [],
+    defaultReuseRouteComponent: 'Wip',
+    getRoutePath: (node) => node.fullPath,
+    getRouteName: (node) => transformPathToName(node.fullPath),
+    getRouteLayout: () => Object.keys(defaultOptions.layouts)[0],
+    getRouteHandle: () => null,
   };
 
   const { layouts, layoutLazyImport, ...restOptions } = Object.assign(defaultOptions, options);
@@ -34,12 +43,14 @@ export function resolveOptions(options?: RouterContextOptions) {
   const pageInclude = Array.isArray(restOptions.pageInclude) ? restOptions.pageInclude : [restOptions.pageInclude];
 
   restOptions.cwd = normalizePath(restOptions.cwd);
-
-  // restOptions.notFoundRouteComponent = pascalCase(restOptions.notFoundRouteComponent);
+  restOptions.defaultReuseRouteComponent = pascalCase(restOptions.defaultReuseRouteComponent);
+  restOptions.notFoundRouteComponent = pascalCase(restOptions.notFoundRouteComponent);
 
   if (Object.keys(layouts).length === 0) {
     throw new Error('layouts is required');
   }
+
+  restOptions.getRouteLayout = () => Object.keys(layouts)[0];
 
   const parsedOptions: ParsedAutoRouterOptions = {
     ...restOptions,
