@@ -1,3 +1,4 @@
+import { generateDtsFile } from './dts';
 import { resolveGlobs } from './glob';
 import { getNodeStatInfo, resolveNodes } from './node';
 import { resolveOptions } from './options';
@@ -121,6 +122,8 @@ export class RouterContext {
     await this.initGlobs();
     await this.initNodes();
     await this.initStatInfo();
+
+    await generateDtsFile(this.nodes, this.options);
   }
 
   /**
