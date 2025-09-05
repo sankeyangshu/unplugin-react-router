@@ -356,3 +356,26 @@ export interface NodeItemBackup {
    */
   inode: number;
 }
+
+/**
+ * the route item backup
+ * @descCN 路由节点备份
+ */
+export interface RouteItemBackup {
+  /**
+   * the filepath of the route
+   * @descCN 路由文件路径
+   */
+  filepath: string;
+  /**
+   * the route code of the route
+   * @descCN 路由代码
+   */
+  routeCode: string;
+}
+
+/**
+ * the route backup
+ * @descCN 路由备份
+ */
+export type RouteBackup = Record<string, RouteItemBackup>;

@@ -2,7 +2,7 @@ import { existsSync } from 'node:fs';
 import { readFile, writeFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import { ensureFile } from '../utils';
-import type { NodeItemBackup } from '../types';
+import type { NodeItemBackup, RouteBackup } from '../types';
 
 const TEMP_DIR = '.temp';
 const GIT_IGNORE = '.gitignore';
@@ -181,4 +181,65 @@ export async function getNodeBackup(root: string) {
   }
 
   return backup;
+}
+
+/**
+ * get node backup item
+ * @descCN 获取节点备份
+ * @param cwd project root path
+ * @param name node name
+ * @returns node backup item
+ */
+export async function getNodeBackupItem(cwd: string, name: string): Promise<NodeItemBackup | null> {
+  const backup = await getNodeBackup(cwd);
+
+  return backup[name] || null;
+}
+
+/**
+ * get route backup
+ * @descCN 获取路由备份
+ * @param cwd project root path
+ * @returns route backup
+ */
+async function getRouteBackup(cwd: string) {
+  const routeBackupPath = getRouteBackupPath(cwd);
+
+  let backup: RouteBackup = {};
+
+  try {
+    const content = await readFile(routeBackupPath, 'utf-8');
+    backup = JSON.parse(content);
+  } catch {
+    backup = {};
+  }
+
+  return backup;
+}
+
+/**
+ * write route backup
+ * @descCN 写入路由备份
+ * @param cwd project root path
+ * @param backup route backup
+ */
+async function writeRouteBackup(cwd: string, backup: RouteBackup) {
+  const routeBackupPath = getRouteBackupPath(cwd);
+  const content = JSON.stringify(backup, null, 2);
+  await writeFile(routeBackupPath, content);
+}
+
+/**
+ * update route backup
+ * @descCN 更新路由备份
+ * @param cwd project root path
+ * @param routeBackup route backup
+ */
+export async function updateRouteBackup(cwd: string, routeBackup: RouteBackup) {
+  await initRouteBackup(cwd);
+
+  const backup = await getRouteBackup(cwd);
+  Object.assign(backup, routeBackup);
+
+  await writeRouteBackup(cwd, backup);
 }

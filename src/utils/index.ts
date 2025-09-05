@@ -1,4 +1,5 @@
 export * from './fs';
+export * from './ast';
 export * from './name';
 export * from './path';
 export * from './route';

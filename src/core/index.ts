@@ -1,7 +1,11 @@
 import { generateDtsFile } from './dts';
+import { generateTransformerFile } from './generate';
 import { resolveGlobs } from './glob';
+import { generateImportsFile } from './imports';
 import { getNodeStatInfo, resolveNodes } from './node';
 import { resolveOptions } from './options';
+import { generateRouteMapFile } from './routeMap';
+import { generateRoutesFile } from './routes';
 import { initTemp, isInExcludeGlob } from './temp';
 import { FileWatcher } from './watcher';
 import type { ViteDevServer } from 'vite';
@@ -124,6 +128,10 @@ export class RouterContext {
     await this.initStatInfo();
 
     await generateDtsFile(this.nodes, this.options);
+    await generateImportsFile(this.nodes, this.options);
+    await generateTransformerFile(this.options);
+    await generateRouteMapFile(this.nodes, this.options);
+    await generateRoutesFile(this.nodes, this.statInfo, this.options);
   }
 
   /**

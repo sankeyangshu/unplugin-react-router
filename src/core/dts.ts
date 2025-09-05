@@ -54,6 +54,8 @@ function getDtsCode(nodes: AutoRouterNode[], options: ParsedAutoRouterOptions) {
   let code = `${prefixComment}
 
 declare module "${UNPLUGIN_REACT_ROUTER_TYPES_MODULE_NAME}" {
+  type IndexRouteObject = import("react-router").IndexRouteObject;
+  type NonIndexRouteObject = import("react-router").NonIndexRouteObject;
 
   /**
    * route layout key
@@ -107,11 +109,29 @@ declare module "${UNPLUGIN_REACT_ROUTER_TYPES_MODULE_NAME}" {
   export type RouteFileKey = Exclude<RouteKey, BuiltinRouteKey | ReuseRouteKey>;
 
   /**
-   * mapped name and fullPath
+   * mapped name and path
    */
   type MappedNamePath = {
-    [K in RouteKey]: { name: K; fullPath: RoutePathMap[K] };
+    [K in RouteKey]: { name: K; path: RoutePathMap[K] };
   }[RouteKey];
+
+  /**
+   * auto router view
+   */
+  export type AutoRouterView = Omit<NonIndexRouteObject, 'children' | 'id' | 'path'> & {
+    component: RouteFileKey;
+    layout: RouteLayoutKey;
+  } & MappedNamePath;
+
+  /**
+   * auto router redirect
+   */
+  export type AutoRouterRedirect = Omit<IndexRouteObject, 'children' | 'id' | 'path'> & MappedNamePath;
+
+  /**
+   * auto router route
+   */
+  export type AutoRouterRoute = AutoRouterView | AutoRouterRedirect;
 }
 `;
 
@@ -129,7 +149,7 @@ export async function generateDtsFile(nodes: AutoRouterNode[], options: ParsedAu
 
   await ensureFile(dtsPath);
 
-  const dtsCode = getDtsCode(nodes, options);
+  const code = getDtsCode(nodes, options);
 
-  await writeFile(dtsPath, dtsCode);
+  await writeFile(dtsPath, code);
 }
